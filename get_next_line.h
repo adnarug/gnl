@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:31 by pguranda          #+#    #+#             */
-/*   Updated: 2022/05/31 15:38:57 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/03 12:41:53 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 #define		GET_NEXT_LINE_H
 #include	<stdlib.h>
 #include	<unistd.h>
+#include	<stdio.h>
+#include	<string.h>
 	
 char	*get_next_line(int fd);
-int	    check_line(char *temp, int buf);
+char*	check_line(int *iter, int fd, int buf, char *next_line);
+char	*ft_strjoin(char const *s1, char const *s2);
 
 #endif

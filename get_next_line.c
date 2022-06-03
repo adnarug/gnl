@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/02 15:49:13 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/03 16:02:28 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,47 +14,51 @@
 #include	<stdio.h>
 #include	<string.h>
 
-/*char	*get_next_line(int fd)
+
+char	*get_next_line(int fd)
 {
 	// int		len;
-	void	*temp;
-	int		i;
-
-	temp = NULL;
-	i = 1;
-	while (i == 1)
-	{
-		temp = malloc(sizeof(BUFFER_SIZE) + 1);
-		if (temp == NULL)
-			return (NULL);
-		read(fd, temp, BUFFER_SIZE);
-		i = check_line((char *)temp, BUFFER_SIZE);
-		free(temp);
-		temp = NULL;
-	}
-	return (temp);
-}*/
-
-int	check_line(char *temp, int buf)
-{
-	int		i;
-	char	*s;
-	int		buf_temp;
+	char	*next_line;
 	char	*new_line;
-	char	*end;
-	
-	i = 0;
-	s = NULL;
-	new_line = NULL;
-	end = NULL;
-	buf_temp = buf;
+	int		*i;
 
-	if (strchr(temp, '\n') != NULL || strchr(temp, '\0') != NULL)// TODO: write my own strrchr
+	next_line = NULL;
+	new_line = NULL;
+	printf ("check");
+	i = malloc(sizeof(int));
+	*i = 1;
+	next_line = malloc(sizeof(char) * BUFFER_SIZE + 1) + strlen(next_line);// what is the correct malloc size? how do i know how big will be the next line?
+	if(next_line == NULL)
+		return (NULL);
+	new_line = malloc(sizeof(char)* (*i) * BUFFER_SIZE);
+	new_line = check_line(i, fd, BUFFER_SIZE, next_line);
+	return (new_line);
+}
+
+char*	check_line(int *iter, int fd, int buf, char *next_line)
+{
+	char	*temp;
+
+	temp = malloc(sizeof(char) * buf + 1);
+	read(fd, temp, buf);
+	// next_line[buf] = '\0';
+	while (strchr(temp, '\n') == NULL && strchr(temp, '\0') == NULL) //maybe check if the line exists
+	{
+		read(fd, next_line, buf);
+		temp = ft_strjoin((const char*)temp, (const char*)next_line);
+		*iter += 1;
+	}
+	printf (" here: %s ", temp);
+	return (temp);
+}
+
+
+	/*if (strchr(temp, '\n') != NULL || strchr(temp, '\0') != NULL)// TODO: write my own strrchr
 	{
 		new_line = strchr(temp, '\n');
 		end = strchr(temp, '\0');
 		if (*temp == '\0')
-			return (0);
+			return NULL;
 		while (temp < new_line || temp < end)
 		{
 			write (1, &(*temp), 1);
@@ -65,17 +69,17 @@ int	check_line(char *temp, int buf)
 			write (1, "\n", 1);
 			temp++;
 		}
-	check_line(temp, buf);
+	// check_line(temp, buf);
 	}
-	return (0);
-}
+	return (temp);
+}*/
 
-int main ()
-{
-	char s[30] = "Hello \nmy friend \nagain";
-	check_line(s, 2);
-	return (1);
-}
+// int main ()
+// {
+// 	open ("")
+// 	get_next_line(s);
+// 	return (1);
+// }
 
 	/*while (temp[i] != '\n' && temp[i] != '\0' && temp[i] != 'Z')
 	{

@@ -11,6 +11,7 @@ int main (int argc, char **argv)
 	fd = 0;
 	if (argc <= 1)
 		return (0);
+	printf ("check");
 	fd = open(argv[1], 0);
 	get_next_line(fd);
 	return (0);
