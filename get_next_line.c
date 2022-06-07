@@ -6,53 +6,80 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/03 16:02:28 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/07 16:32:07 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"./get_next_line.h"
 #include	<stdio.h>
-#include	<string.h>
-
 
 char	*get_next_line(int fd)
 {
-	// int		len;
-	char	*next_line;
-	char	*new_line;
-	int		*i;
+	char		*read_line;
+	char		**temp;
+	int			*buff_counter;
+	static char	*rest;
 
-	next_line = NULL;
-	new_line = NULL;
-	printf ("check");
-	i = malloc(sizeof(int));
-	*i = 1;
-	next_line = malloc(sizeof(char) * BUFFER_SIZE + 1) + strlen(next_line);// what is the correct malloc size? how do i know how big will be the next line?
-	if(next_line == NULL)
+	rest = NULL;
+	buff_counter = malloc(sizeof(int));
+	read_line = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	temp = NULL;
+	if(buff_counter == NULL)
 		return (NULL);
-	new_line = malloc(sizeof(char)* (*i) * BUFFER_SIZE);
-	new_line = check_line(i, fd, BUFFER_SIZE, next_line);
-	return (new_line);
-}
-
-char*	check_line(int *iter, int fd, int buf, char *next_line)
-{
-	char	*temp;
-
-	temp = malloc(sizeof(char) * buf + 1);
-	read(fd, temp, buf);
-	// next_line[buf] = '\0';
-	while (strchr(temp, '\n') == NULL && strchr(temp, '\0') == NULL) //maybe check if the line exists
-	{
-		read(fd, next_line, buf);
-		temp = ft_strjoin((const char*)temp, (const char*)next_line);
-		*iter += 1;
+	*buff_counter = 1;
+	if(*buff_counter == 1)//first iteration, setting memory, filling with buff, copying it to buff with more space 
+	{	
+		read_line = malloc(sizeof(char) * BUFFER_SIZE + 1);
+		get_line(buff_counter, fd, BUFFER_SIZE, read_line);		
+		memory_line(BUFFER_SIZE, read_line, temp);
 	}
-	printf (" here: %s ", temp);
-	return (temp);
+	printf ("temp after cpy: %s \n temp len after cpy: %lu \n", &temp, strlen(&temp));
+
+	// while (strchr(read_line, '\n') == NULL)
+	// {
+	// 	read_line = malloc(sizeof(temp));
+	// 	printf("Hi");
+	// 	strcpy(read_line, (const char*)temp);
+	// 	// // free(temp);
+	// 	// // temp = NULL;
+	// 	// get_line(buff_counter, fd, BUFFER_SIZE, read_line);
+	// 	// memory_line(buff_counter, BUFFER_SIZE, read_line, temp); //+1?
+	// }
+	// if (strchr(read_line, '\n') != NULL)
+	// {
+	// 	rest = strchr(read_line, '\n');
+	// 	free(rest);
+	// 	rest = NULL;
+	// }
+	//free(buff_counter);
+	return (read_line);
 }
 
+void		get_line(int *iter, int fd, int buf, char *next_line)
+{
+	if (*iter == 1)
+		read(fd, next_line, buf);
+	// else
+	// read(fd, next_line + (buf * (*iter)), buf); 
+	next_line[strlen(next_line)] = '\0';
+	// printf ("tracing: %d",	next_line[strlen(next_line)]);
+	*iter += 1;	// temp = malloc(sizeof(char) * buf + 1);
+}
 
+void	memory_line(int buffer_size, char *read_line, char **temp)
+{
+	int		i;
+
+	printf ("entering memline: %s \n", read_line);
+	temp = malloc(sizeof(read_line) + buffer_size);
+	i = 0;
+	while (read_line[i] != '\0')
+	{
+		*temp[i] = read_line[i];
+		i++;
+	}
+	printf ("temp after cpy: %s \n temp len after cpy: %lu \n", *temp, strlen(*temp));
+}
 	/*if (strchr(temp, '\n') != NULL || strchr(temp, '\0') != NULL)// TODO: write my own strrchr
 	{
 		new_line = strchr(temp, '\n');
@@ -69,7 +96,7 @@ char*	check_line(int *iter, int fd, int buf, char *next_line)
 			write (1, "\n", 1);
 			temp++;
 		}
-	// check_line(temp, buf);
+	/		get_line(temp, buf);
 	}
 	return (temp);
 }*/

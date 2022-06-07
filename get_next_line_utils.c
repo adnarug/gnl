@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/03 12:45:33 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/07 10:58:56 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,17 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		counter++;
 	}
 	return (new_string);
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*p;
+
+	if (size > 0 && (SIZE_MAX / size) < count)
+		return (NULL);
+	p = malloc (count * size);
+	if (p == NULL)
+		return (NULL);
+	ft_bzero(p, count * size);
+	return (p);
 }
