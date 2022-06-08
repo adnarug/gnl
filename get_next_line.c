@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/08 18:04:29 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/08 18:18:42 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*get_next_line(int fd)
 	{
 		read_line = malloc(sizeof(char) * BUFFER_SIZE + 1 + sizeof(rest));
 		strcpy(read_line, rest);
-		read_line += strlen(rest) + 1;
+		read_line += strlen(rest);
 	}
 	if (rest == NULL)
 	{
@@ -45,16 +45,31 @@ char	*get_next_line(int fd)
 		free(read_line);
 		read_line = NULL;
 	}
+	if (rest != NULL)
+	while(strchr(read_line,'\n') == NULL)
+	{
+		{
+			read_line = malloc(sizeof(temp));
+			strcpy(read_line, (const char*)temp);
+			//printf("read_line: %s \n", read_line);
+			free(temp);
+			temp = NULL;
+			get_line(buff_counter, fd, BUFFER_SIZE, &read_line);
+			memory_line(BUFFER_SIZE, read_line, &temp); //+1?
+		}
 	//Second and following iterations - re-assigning to read_line, empty temp and fill it with the new values
+	if (rest == NULL)
 	while(strchr(temp,'\n') == NULL)
 	{
-	 	read_line = malloc(sizeof(temp));
-		strcpy(read_line, (const char*)temp);
-		//printf("read_line: %s \n", read_line);
-		free(temp);
-		temp = NULL;
-		get_line(buff_counter, fd, BUFFER_SIZE, &read_line);
-		memory_line(BUFFER_SIZE, read_line, &temp); //+1?
+		{
+			read_line = malloc(sizeof(temp));
+			strcpy(read_line, (const char*)temp);
+			//printf("read_line: %s \n", read_line);
+			free(temp);
+			temp = NULL;
+			get_line(buff_counter, fd, BUFFER_SIZE, &read_line);
+			memory_line(BUFFER_SIZE, read_line, &temp); //+1?
+		}
 	}
 	read_line[strlen(read_line)] = '\0';
 	printf("before split: %s \n", read_line);
@@ -62,7 +77,7 @@ char	*get_next_line(int fd)
 	rest_point = strchr(read_line, '\n');
 	if(rest_point != NULL && *(rest_point + 1) != '\0')
 	splitting(read_line, rest_point, &rest);
-	printf("after split: %s \n", rest);
+	printf("before split: %s \n", read_line);
 	return (read_line);
 }
 
