@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pasha <pasha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/07 20:27:17 by pasha            ###   ########.fr       */
+/*   Updated: 2022/06/08 13:11:42 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,3 +40,26 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	return (new_string);
 }
+
+
+void	ft_bzero(void *s, size_t n)
+{
+	char				*p;
+
+	p = s;
+	while (n > 0)
+	{
+		*p = '\0';
+		p++;
+		n--;
+	}
+}	
+
+// void struct_default_values(t_arg **line)
+// {
+// 	line->read_line = NULL;
+// 	line->temp = NULL;
+// 	*line->buf_counter = 0;
+// 	line->next_line = NULL;
+// 	line->rest = NULL;
+// }

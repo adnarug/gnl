@@ -10,6 +10,10 @@ int main ()
 
 	fd = 0;
 	fd = open("text", 0);
+	printf ("main next line: %s \n", get_next_line(fd));
+	printf ("next line: %s \n", get_next_line(fd));
+	printf ("next line: %s \n", get_next_line(fd));
+	printf ("next line: %s \n", get_next_line(fd));
 	printf ("next line: %s \n", get_next_line(fd));
 	return (0);
 }
