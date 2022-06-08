@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pasha <pasha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/07 23:15:13 by pasha            ###   ########.fr       */
+/*   Updated: 2022/06/08 10:11:25 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,13 @@ void		get_line(int *iter, int fd, int buf, char **next_line)
 	if (*iter == 1)
 	{
 		read(fd, *next_line, buf);
-		printf ("first");
+		printf ("first ");
 		*iter += 1;
+		return ;
 	}
-	printf("voila: %c \n", *next_line[2]);
-	else
-	{
-		read(fd, end, buf); 
-	}
-	*next_line[strlen(*next_line)] = '\0';
+	end = *next_line + strlen(*next_line);
+	read(fd, end , buf); 
+	// *next_line[strlen(*next_line)] = '\0';
 	// printf ("tracing: %d",	next_line[strlen(next_line)]);
 		// temp = malloc(sizeof(char) * buf + 1);
 }
