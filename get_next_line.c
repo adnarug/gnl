@@ -6,128 +6,126 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/08 18:18:42 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/09 18:22:53 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"./get_next_line.h"
 #include	<stdio.h>
+#include 	<fcntl.h>
+
 
 char	*get_next_line(int fd)
 {
-	char		*read_line;
-	char		*temp;
+
 	int			*buff_counter;
 	char		*next_line;
-	char		*rest_point;
 	static char	*rest;
 
 	//static char	*rest;
 	//rest = NULL;
+	if(fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
 	buff_counter = malloc(sizeof(int));
-		temp = NULL;
+	//rest = malloc(BUFFER_SIZE + 1);
+	printf("Step 1");
 	if(buff_counter == NULL)
 		return (NULL);
 	*buff_counter = 1;
-	//First iteration - fills with buff and gives a string which is + buf in size
-	if (rest == NULL)
-		read_line = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	else
-	{
-		read_line = malloc(sizeof(char) * BUFFER_SIZE + 1 + sizeof(rest));
-		strcpy(read_line, rest);
-		read_line += strlen(rest);
-	}
-	if (rest == NULL)
-	{
-		get_line(buff_counter, fd, BUFFER_SIZE, &read_line);
-		memory_line(BUFFER_SIZE, read_line, &temp);
-		free(read_line);
-		read_line = NULL;
-	}
-	if (rest != NULL)
-	while(strchr(read_line,'\n') == NULL)
-	{
-		{
-			read_line = malloc(sizeof(temp));
-			strcpy(read_line, (const char*)temp);
-			//printf("read_line: %s \n", read_line);
-			free(temp);
-			temp = NULL;
-			get_line(buff_counter, fd, BUFFER_SIZE, &read_line);
-			memory_line(BUFFER_SIZE, read_line, &temp); //+1?
-		}
-	//Second and following iterations - re-assigning to read_line, empty temp and fill it with the new values
-	if (rest == NULL)
-	while(strchr(temp,'\n') == NULL)
-	{
-		{
-			read_line = malloc(sizeof(temp));
-			strcpy(read_line, (const char*)temp);
-			//printf("read_line: %s \n", read_line);
-			free(temp);
-			temp = NULL;
-			get_line(buff_counter, fd, BUFFER_SIZE, &read_line);
-			memory_line(BUFFER_SIZE, read_line, &temp); //+1?
-		}
-	}
-	read_line[strlen(read_line)] = '\0';
-	printf("before split: %s \n", read_line);
-	//If there is \n sign then I need to put it away
-	rest_point = strchr(read_line, '\n');
-	if(rest_point != NULL && *(rest_point + 1) != '\0')
-	splitting(read_line, rest_point, &rest);
-	printf("before split: %s \n", read_line);
-	return (read_line);
+	rest = get_line(fd, rest, buff_counter);
+	next_line = split_next_line(rest);
+	rest = split_remainder(rest);
+	return (next_line);
 }
 
-void	get_line(int *iter, int fd, int buf, char **next_line)
+char *split_next_line(char *rest)
 {
-	char *end;
-	if (*iter == 1)
-	{
-		read(fd, *next_line, buf);
-		// printf ("first ");
-		*iter += 1;
-		return ;
-	}
-	end = *next_line + strlen(*next_line);
-	read(fd, end , buf); 
-	// *next_line[strlen(*next_line)] = '\0';
-	// printf ("tracing: %d",	next_line[strlen(next_line)]);
-	// temp = malloc(sizeof(char) * buf + 1);
-}
-
-void	memory_line(int buffer_size, char *read_line, char **temp)
-{
-	*temp = malloc(sizeof(read_line) + buffer_size);
-	strcpy(*temp, (const char *)read_line);
-}
-
-void	splitting(char *next_line, char *rest_point, char **rest)
-{
-	int	i;
-	int z;
+	char	*new_line;
+	char	*line_break_point;
+	int		i;
 
 	i = 0;
-	z = 0;
-	while (next_line <= rest_point)
-	{
-		next_line++;
+	while (rest[i] != '\n')
 		i++;
-	}	
-	z = strlen(next_line);
-	*rest = malloc(sizeof(strlen(next_line)));
-	if (*rest == NULL)
-		return ;
-	while (*next_line != '\0')
+	i = 0;
+	new_line = malloc(sizeof(char)* i + 2);
+	line_break_point = strchr(rest, '\n');
+	while(line_break_point != NULL && rest <= line_break_point)
 	{
-		**rest = *next_line;
-		*next_line = '\0';
-		next_line++;
-		*rest += 1;
+		new_line[i] = rest[i]; // maybe both i and pointer increase will not work 
 		i++;
+		rest++;
 	}
-	*rest -= z;
-	next_line -= i;
+	new_line[i] = '\0';
+	return (new_line);
+}
+
+char *split_remainder(char *rest)
+{
+	unsigned int		i;
+	char	*remainder;
+
+	i = 0;
+	rest++;
+	while (i < strlen(rest))
+		i++;
+	remainder = malloc(sizeof(char)* i + 2);
+	i = 0;
+	while (i < strlen(rest))
+	{
+		remainder[i] = *rest;
+		i++;
+		rest++;
+	}
+	remainder[i + 1] = '\0';
+	free(rest);
+	rest = NULL;
+	return(remainder);
+}
+
+char	*get_line(int fd, char *rest, int *buf_counter)
+{
+	char	*new_line;
+	int		read_result;
+
+	read_result = 1;
+	new_line = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if(new_line == NULL)
+		return (NULL);
+	while (ft_strchr(rest, '\n') == NULL && read_result != 0)
+	{
+		read_result = read(fd, new_line, BUFFER_SIZE);
+		if(read_result == -1)
+		{
+			free(new_line);
+			new_line = NULL;
+			return (NULL);
+		}
+		*buf_counter += 1;
+		new_line[*buf_counter * BUFFER_SIZE + 1] = '\0';
+		rest = line_merge(new_line, &rest);
+	}
+	free(new_line);
+	new_line = NULL;
+	return (rest);
+}
+
+int	main(void)
+{
+	char	*s;
+	int fd;
+	fd = 0;
+	fd = open("/Users/pguranda/Projects/gnl_wip/text", O_RDONLY);
+	s = get_next_line(fd);
+	//int fd;
+	// get_next_line(fd);
+	// get_next_line(fd);
+	// get_next_line(fd);
+	// get_next_line(fd);
+	printf("%s", s);
+	free(s);
+	//s = NULL;
+	// printf("%s", get_next_line(fd));
+	//printf("%s", ft_strjoin("\n\n", buffer));
+	return (0);
 }

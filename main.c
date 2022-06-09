@@ -9,11 +9,13 @@ int main ()
 	int	fd;
 
 	fd = 0;
-	fd = open("text", 0);
+	fd = open("text", O_RDONLY);
+	printf ("%d", fd);
+	fd = 3;
 	printf ("main next line: %s \n", get_next_line(fd));
-	printf ("next line: %s \n", get_next_line(fd));
-	printf ("next line: %s \n", get_next_line(fd));
-	printf ("next line: %s \n", get_next_line(fd));
-	printf ("next line: %s \n", get_next_line(fd));
+	// printf ("next line: %s \n", get_next_line(fd));
+	// printf ("next line: %s \n", get_next_line(fd));
+	// printf ("next line: %s \n", get_next_line(fd));
+	// printf ("next line: %s \n", get_next_line(fd));
 	return (0);
 }

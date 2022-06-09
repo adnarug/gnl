@@ -6,55 +6,56 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/08 13:11:42 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/09 18:22:46 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*line_merge(char  *new_line, char  **rest)
 {
 	char					*new_string;
 	unsigned int			len;
 	unsigned int			i;
-	unsigned int						counter;
+	unsigned int			counter;
 
-	if (s1 == NULL || s2 == NULL)
+	new_string = malloc(sizeof(char) * strlen(new_line) + sizeof(char) * strlen(*rest) + 1);
+	if (new_line == NULL || rest == NULL || new_string == NULL)
 		return (NULL);
-	len = strlen(s1) + strlen(s2);
-	new_string = (char *)malloc(len + 1);
+	len = strlen(new_line) + strlen(*rest);
 	counter = 0;
 	i = 0;
-	if (!new_string)
-		return (NULL);
-	while (i < strlen(s1))
+	while (i < strlen(*rest))
 	{
-		new_string[i] = s1[i];
+		new_string[i] = *rest[i];
 		i++;
 	}
-	while (counter <= strlen(s2))
+	while (counter <= strlen(new_line))
 	{
-		new_string[i] = s2[counter];
+		new_string[i] = new_line[counter];
 		i++;
 		counter++;
 	}
+	free(new_line);
+	new_line = NULL;
+	free(rest);
+	rest = NULL;
 	return (new_string);
 }
 
-
-void	ft_bzero(void *s, size_t n)
+char	*ft_strchr(const char *s, int c)
 {
-	char				*p;
+	int	i;
 
-	p = s;
-	while (n > 0)
-	{
-		*p = '\0';
-		p++;
-		n--;
-	}
-}	
-
+	if (!s)
+		return (NULL);
+	i = 0;
+	while (s[i] != (char)c && s[i] != '\0')
+		i++;
+	if (s[i] == (char)c)
+		return ((char *)s + i + 1);
+	return (NULL);
+}
 // void struct_default_values(t_arg **line)
 // {
 // 	line->read_line = NULL;
