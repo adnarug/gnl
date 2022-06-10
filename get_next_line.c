@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/10 12:44:38 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/10 16:45:15 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,23 @@ char *split_next_line(char *rest)
 {
 	char	*new_line;
 	char	*line_break_point;
+	char	*eof_point;
 	int		i;
 
 	i = 0;
-	while (rest[i] != '\n')
+	while (rest[i] != '\n' && rest[i] != '\0')// zero here?
 		i++;
 	i = 0;
 	new_line = malloc(sizeof(char)* i + 2);
 	line_break_point = strchr(rest, '\n');
-	while(line_break_point != NULL && &rest[i] <= line_break_point)
+	eof_point = strchr(rest, '\0');
+	while(((line_break_point != NULL) || (eof_point != NULL)) && ((rest[i] != '\n') && (rest[i] != '\0')))
 	{
-		new_line[i] = rest[i]; // maybe both i and pointer increase will not work 
+		new_line[i] = rest[i]; 
 		i++;
 	}
-	new_line[i] = '\0';
+	new_line[i] = '\n';
+	new_line[i + 1] = '\0';
 	return (new_line);
 }
 
@@ -67,13 +70,13 @@ char *split_remainder(char **rest)
 
 	i = 0;
 	d = 0;
-	while (**rest != '\n')
+	while (**rest != '\n' && **rest != '\0')
 		*rest += 1;
 	*rest += 1;
 	i = strlen(*rest);
 	if (i == 0)
 		return (NULL);
-	remainder = malloc(sizeof(char) * i + 3);
+	remainder = malloc(sizeof(char) * i + 2);
 	if (remainder == NULL)
 		return (NULL);
 	strcpy(remainder, *rest);
@@ -91,7 +94,7 @@ char	*get_line(int fd, char *rest, int *buf_counter)
 	new_line = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if(new_line == NULL)
 		return (NULL);
-	while (ft_strchr(rest, '\n') == NULL && read_result != 0)
+	while ((ft_strchr(rest, '\n') == NULL) && read_result != 0)
 	{
 		read_result = read(fd, new_line, BUFFER_SIZE);
 		if(read_result == -1)
@@ -100,9 +103,15 @@ char	*get_line(int fd, char *rest, int *buf_counter)
 			new_line = NULL;
 			return (NULL);
 		}
+		if(read_result == 0)
+		{
+			rest = line_merge(new_line, rest);
+			break;
+		}
 		*buf_counter += 1;
 		new_line[*buf_counter * BUFFER_SIZE + 1] = '\0';
 		rest = line_merge(new_line, rest);
+		bzero(new_line, BUFFER_SIZE);
 	}
 	free(new_line);
 	new_line = NULL;
@@ -119,6 +128,17 @@ int	main(void)
 	printf("%s", s);
 	s = get_next_line(fd);
 	printf("%s", s);
+	s = get_next_line(fd);
+	printf("%s", s);
+	s = get_next_line(fd);
+	printf("%s", s);
+	s = get_next_line(fd);
+	printf("%s", s);
+	s = get_next_line(fd);
+	printf("%s", s);
+	s = get_next_line(fd);
+	printf("%s", s);
+
 	// get_next_line(fd);
 	// get_next_line(fd);
 	// get_next_line(fd);
