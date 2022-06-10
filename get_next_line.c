@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/10 16:45:15 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/10 17:29:16 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,14 @@
 
 char	*get_next_line(int fd)
 {
-
-	int			*buff_counter;
 	char		*next_line;
 	static char	*rest;
 
-	//static char	*rest;
-	//rest = NULL;
 	if(fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
-	buff_counter = malloc(sizeof(int));
-	//rest = malloc(BUFFER_SIZE + 1);
-	if(buff_counter == NULL)
-		return (NULL);
-	*buff_counter = 1;
-	rest = get_line(fd, rest, buff_counter);
+	get_line(fd, &rest);
 	next_line = split_next_line(rest);
-	rest = split_remainder(&rest);
+	split_remainder(&rest);
 	return (next_line);
 }
 
@@ -48,7 +39,7 @@ char *split_next_line(char *rest)
 	while (rest[i] != '\n' && rest[i] != '\0')// zero here?
 		i++;
 	i = 0;
-	new_line = malloc(sizeof(char)* i + 2);
+	new_line = malloc(sizeof(char) * i + 2);
 	line_break_point = strchr(rest, '\n');
 	eof_point = strchr(rest, '\0');
 	while(((line_break_point != NULL) || (eof_point != NULL)) && ((rest[i] != '\n') && (rest[i] != '\0')))
@@ -61,12 +52,11 @@ char *split_next_line(char *rest)
 	return (new_line);
 }
 
-char *split_remainder(char **rest)
+void split_remainder(char **rest)
 {
 	unsigned int		i; 
-	char	*remainder;
-	int d;
-
+	char				*remainder;
+	int					d;
 
 	i = 0;
 	d = 0;
@@ -75,47 +65,47 @@ char *split_remainder(char **rest)
 	*rest += 1;
 	i = strlen(*rest);
 	if (i == 0)
-		return (NULL);
+		return ;
 	remainder = malloc(sizeof(char) * i + 2);
 	if (remainder == NULL)
-		return (NULL);
+		return ;
 	strcpy(remainder, *rest);
 	remainder[i] = '\0';
-	*rest = NULL;
-	return(remainder);
+	*rest = remainder;
 }
 
-char	*get_line(int fd, char *rest, int *buf_counter)
+void	get_line(int fd, char **rest)
 {
 	char	*new_line;
 	int		read_result;
+	int		buf_iterations;
 
 	read_result = 1;
+	buf_iterations = 1;
 	new_line = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if(new_line == NULL)
-		return (NULL);
-	while ((ft_strchr(rest, '\n') == NULL) && read_result != 0)
+		return ;
+	while ((ft_strchr(*rest, '\n') == NULL) && read_result != 0)
 	{
 		read_result = read(fd, new_line, BUFFER_SIZE);
 		if(read_result == -1)
 		{
 			free(new_line);
 			new_line = NULL;
-			return (NULL);
+			return ;
 		}
 		if(read_result == 0)
 		{
-			rest = line_merge(new_line, rest);
+			line_merge(new_line, &*rest);
 			break;
 		}
-		*buf_counter += 1;
-		new_line[*buf_counter * BUFFER_SIZE + 1] = '\0';
-		rest = line_merge(new_line, rest);
+		buf_iterations++;
+		new_line[buf_iterations * BUFFER_SIZE] = '\0';
+		line_merge(new_line, &*rest);
 		bzero(new_line, BUFFER_SIZE);
 	}
 	free(new_line);
 	new_line = NULL;
-	return (rest);
 }
 
 int	main(void)
@@ -143,9 +133,9 @@ int	main(void)
 	// get_next_line(fd);
 	// get_next_line(fd);
 	// get_next_line(fd);
-	free(s);
 	//s = NULL;
 	// printf("%s", get_next_line(fd));
 	//printf("%s", ft_strjoin("\n\n", buffer));
+	system("leaks a.out");
 	return (0);
 }
