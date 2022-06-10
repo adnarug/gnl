@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/09 18:22:53 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/10 12:44:38 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,12 @@ char	*get_next_line(int fd)
 		return (0);
 	buff_counter = malloc(sizeof(int));
 	//rest = malloc(BUFFER_SIZE + 1);
-	printf("Step 1");
 	if(buff_counter == NULL)
 		return (NULL);
 	*buff_counter = 1;
 	rest = get_line(fd, rest, buff_counter);
 	next_line = split_next_line(rest);
-	rest = split_remainder(rest);
+	rest = split_remainder(&rest);
 	return (next_line);
 }
 
@@ -50,36 +49,36 @@ char *split_next_line(char *rest)
 	i = 0;
 	new_line = malloc(sizeof(char)* i + 2);
 	line_break_point = strchr(rest, '\n');
-	while(line_break_point != NULL && rest <= line_break_point)
+	while(line_break_point != NULL && &rest[i] <= line_break_point)
 	{
 		new_line[i] = rest[i]; // maybe both i and pointer increase will not work 
 		i++;
-		rest++;
 	}
 	new_line[i] = '\0';
 	return (new_line);
 }
 
-char *split_remainder(char *rest)
+char *split_remainder(char **rest)
 {
-	unsigned int		i;
+	unsigned int		i; 
 	char	*remainder;
+	int d;
+
 
 	i = 0;
-	rest++;
-	while (i < strlen(rest))
-		i++;
-	remainder = malloc(sizeof(char)* i + 2);
-	i = 0;
-	while (i < strlen(rest))
-	{
-		remainder[i] = *rest;
-		i++;
-		rest++;
-	}
-	remainder[i + 1] = '\0';
-	free(rest);
-	rest = NULL;
+	d = 0;
+	while (**rest != '\n')
+		*rest += 1;
+	*rest += 1;
+	i = strlen(*rest);
+	if (i == 0)
+		return (NULL);
+	remainder = malloc(sizeof(char) * i + 3);
+	if (remainder == NULL)
+		return (NULL);
+	strcpy(remainder, *rest);
+	remainder[i] = '\0';
+	*rest = NULL;
 	return(remainder);
 }
 
@@ -103,7 +102,7 @@ char	*get_line(int fd, char *rest, int *buf_counter)
 		}
 		*buf_counter += 1;
 		new_line[*buf_counter * BUFFER_SIZE + 1] = '\0';
-		rest = line_merge(new_line, &rest);
+		rest = line_merge(new_line, rest);
 	}
 	free(new_line);
 	new_line = NULL;
@@ -117,12 +116,13 @@ int	main(void)
 	fd = 0;
 	fd = open("/Users/pguranda/Projects/gnl_wip/text", O_RDONLY);
 	s = get_next_line(fd);
-	//int fd;
-	// get_next_line(fd);
-	// get_next_line(fd);
-	// get_next_line(fd);
-	// get_next_line(fd);
 	printf("%s", s);
+	s = get_next_line(fd);
+	printf("%s", s);
+	// get_next_line(fd);
+	// get_next_line(fd);
+	// get_next_line(fd);
+	// get_next_line(fd);
 	free(s);
 	//s = NULL;
 	// printf("%s", get_next_line(fd));

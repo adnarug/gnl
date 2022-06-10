@@ -6,28 +6,33 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/09 18:22:46 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/10 11:11:37 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*line_merge(char  *new_line, char  **rest)
+char	*line_merge(char  *new_line, char  *rest)
 {
 	char					*new_string;
 	unsigned int			len;
 	unsigned int			i;
 	unsigned int			counter;
 
-	new_string = malloc(sizeof(char) * strlen(new_line) + sizeof(char) * strlen(*rest) + 1);
+	if (rest == NULL)
+	{
+		rest = (char *)malloc(1 * sizeof(char));
+		*rest = '\0';
+	}
+	len = strlen(new_line) + strlen(rest);
+	new_string = malloc(sizeof(char) * len + 1);
 	if (new_line == NULL || rest == NULL || new_string == NULL)
 		return (NULL);
-	len = strlen(new_line) + strlen(*rest);
 	counter = 0;
 	i = 0;
-	while (i < strlen(*rest))
+	while (i < strlen(rest))
 	{
-		new_string[i] = *rest[i];
+		new_string[i] = rest[i];
 		i++;
 	}
 	while (counter <= strlen(new_line))
@@ -36,8 +41,6 @@ char	*line_merge(char  *new_line, char  **rest)
 		i++;
 		counter++;
 	}
-	free(new_line);
-	new_line = NULL;
 	free(rest);
 	rest = NULL;
 	return (new_string);
