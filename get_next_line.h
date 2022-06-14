@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:31 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/10 17:29:04 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/14 15:44:04 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,13 @@
 // void	ft_bzero(void *s, size_t n);
 // // void	struct_default_values(t_arg **line);
 
-char    *split_next_line(char *rest);
-void    split_remainder(char **rest);
-void    get_line(int fd, char **rest);
+char	*split_next_line(char *rest, int *last_read);
+char	*split_remainder(char *rest);
+void	read_until_nl(int fd, char **rest, int *last_read);
 char	*get_next_line(int fd);
-void	line_merge(char  *new_line, char  **rest);
+char	*line_merge(char  *new_line, char  *rest);
 char	*ft_strchr(const char *s, int c);
+void	ft_free(void *pointer);
 
 
 #endif
