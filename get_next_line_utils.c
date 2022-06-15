@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pasha <pasha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/15 16:39:43 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/15 23:08:08 by pasha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*line_merge(char  *new_line, char  *unsorted_line)
 		i++;
 		counter++;
 	}
-	new_string[len + 1] = '\0';
+	new_string[len] = '\0';
 	free(unsorted_line);
 	unsorted_line = NULL;
 	return(new_string);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pasha <pasha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 15:15:40 by rmazurit          #+#    #+#             */
-/*   Updated: 2022/06/15 16:25:42 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/15 23:01:15 by pasha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(void)
 	// int		fd4;
 	// int		fd5;
 	// int		fd6;
-	fd1 = open("/Users/pguranda/Projects/gnl_1/tests/lorem_ipsum.txt", O_RDONLY);
+	fd1 = open("/home/pasha/Desktop/printf/gnl/gnl_check/tests/lorem_ipsum.txt", O_RDONLY);
 	// fd2 = open("./tests/empty_line.txt", O_RDONLY);
 	// fd3 = open("./tests/empty_file.txt", O_RDONLY);
 	// fd4 = open("./tests/42_with_nl.txt", O_RDONLY);
@@ -41,8 +41,7 @@ int	main(void)
 	{	
 		line = get_next_line(fd1);
 		printf("line [%d]: %s\n", i, line);
-		free(line);
-		line = NULL;
+	
 		i++;
 	}
 	//close(fd1);

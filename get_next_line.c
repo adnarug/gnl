@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pasha <pasha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/15 16:40:03 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/15 23:06:57 by pasha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,10 @@ void	read_until_nl(int fd, char **unsorted_line, int *last_read)
 {
 	char	*new_line;
 	int		read_result;
-	int		len;
 
 	read_result = 1;
-	len = 0;
 	new_line = NULL;
-	new_line = malloc(sizeof(char) * BUFFER_SIZE + 1); /// +1
+	new_line = malloc(sizeof(char) * BUFFER_SIZE); /// +1
 	if(new_line == NULL)
 		return ;
 	while ((ft_strchr(*unsorted_line, '\n') == NULL) && read_result > 0)
@@ -110,11 +108,9 @@ char *split_next_line(char *unsorted_line, int *last_read)
 char *split_remainder(char *unsorted_line)
 {
 	unsigned int		i; 
-	unsigned int		d;
 	char				*remainder;
 
 	i = 0;
-	d = 0;
 	while (unsorted_line[i] != '\n' && unsorted_line[i] != '\0')
 		i++;
 	if (unsorted_line[i] == '\n')
@@ -131,22 +127,28 @@ char *split_remainder(char *unsorted_line)
 }
 
 
-// int	main(void)
-// {
-// 	char	*s;
-// 	int fd;
-// 	fd = 0;
-// 	int i;
-
-// 	i = 0;
-// 	fd = open("/Users/pguranda/Projects/gnl_1/text", O_RDONLY);
-// 	s = get_next_line(fd);
-// 	printf ("%s", s);
-// 	//printf ("number of chars %lu\n", strlen(s));
-// 	// s = get_next_line(fd);
-// 	// printf ("%s", s);
-// 	// s = get_next_line(fd);
-// 	// printf ("%s", s);
-// 	system("leaks a.out");
-// 	return (0);
-// }
+/* int	main(void)
+{
+ 	char	*s;
+ 	int fd;
+ 	fd = 0;
+;
+ 	fd = open("/home/pasha/Desktop/printf/gnl/gnl_check/text", O_RDONLY);
+ 	s = get_next_line(fd);
+ 	printf ("%s", s);
+	s = get_next_line(fd);
+ 	printf ("%s", s);
+	s = get_next_line(fd);
+	printf ("%s", s);
+	s = get_next_line(fd);
+	printf ("%s", s);
+	s = get_next_line(fd);
+	printf ("%s", s);
+ 	//printf ("number of chars %lu\n", strlen(s));
+ 	// s = get_next_line(fd);
+	// printf ("%s", s);
+	// s = get_next_line(fd);
+	// printf ("%s", s);
+	system("leaks a.out");
+	return (0);
+} */
