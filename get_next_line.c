@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/14 17:19:09 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/15 16:40:03 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,46 @@
 #include	<stdio.h>
 #include 	<fcntl.h>
 
-
+/*	- Read until the read line contains \n or \0, then put it all into unsorted line
+	- Take out the next line from unsorted line and return it (leak to be freed in main)
+	- Take out the remainder after \n and put it at the start of unsorted line for further use*/
 char	*get_next_line(int fd)
 {
-	static char	*rest;
+	static char	*unsorted_line;
 	char		*next_line;
 	int			last_read;
 
+	if(read(fd, NULL, 0) < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	last_read = 0;
 	next_line = NULL;
-	if(fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
-	read_until_nl(fd, &rest, &last_read);
-	next_line = split_next_line(rest, &last_read);
-	rest = split_remainder(rest);
-	return (next_line);
+	read_until_nl(fd, &unsorted_line, &last_read);
+	if (unsorted_line == NULL)
+		return (NULL);
+	else if (*unsorted_line == '\0')
+	{
+		free(unsorted_line);
+		unsorted_line = NULL;
+		return (NULL);
+	}
+	next_line = split_next_line(unsorted_line, &last_read);
+	unsorted_line = split_remainder(unsorted_line);
+	return(next_line);
 }
 
-void	read_until_nl(int fd, char **rest, int *last_read)
+void	read_until_nl(int fd, char **unsorted_line, int *last_read)
 {
 	char	*new_line;
 	int		read_result;
-	int		buf_iterations;
+	int		len;
 
 	read_result = 1;
-	buf_iterations = 1;
+	len = 0;
 	new_line = NULL;
-	new_line = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	new_line = malloc(sizeof(char) * BUFFER_SIZE + 1); /// +1
 	if(new_line == NULL)
 		return ;
-	while ((ft_strchr(*rest, '\n') == NULL) && read_result > 0)
+	while ((ft_strchr(*unsorted_line, '\n') == NULL) && read_result > 0)
 	{
 		read_result = read(fd, new_line, BUFFER_SIZE);
 		if(read_result == -1)
@@ -55,31 +65,38 @@ void	read_until_nl(int fd, char **rest, int *last_read)
 		if(read_result == 0)
 		{
 			*last_read = 1;
-			*rest = line_merge(new_line, *rest);
+			*unsorted_line = line_merge(new_line, *unsorted_line);
 			break;
 		}
-		buf_iterations++;
-		new_line[buf_iterations * BUFFER_SIZE] = '\0';
-		*rest = line_merge(new_line, *rest);
+		// if (*new_line == '\n')
+		// {
+		// 	**unsorted_line = '\n';
+		// 	break;
+		// }
+
+		*unsorted_line = line_merge(new_line, *unsorted_line);
 		bzero(new_line, BUFFER_SIZE);
 	}
 	free(new_line);
 	new_line = NULL;
 }
 
-char *split_next_line(char *rest, int *last_read)
+char *split_next_line(char *unsorted_line, int *last_read)
 {
 	char	*new_line;
 	int		i;
 
 	i = 0;
-	while (strchr(rest, '\n') != NULL && rest[i] != '\n')// zero here?
+	//while (strchr(unsorted_line, '\n') != NULL && unsorted_line[i] != '\n')// zero here?
+	while (unsorted_line[i] != '\n' && unsorted_line[i] != '\0')
 		i++;
 	new_line = malloc(sizeof(char) * i + 2);
+	if (new_line == NULL)
+		return (NULL);
 	i = 0;
-	while(((strchr(rest, '\n') != NULL) || (strchr(rest, '\0') != NULL)) && ((rest[i] != '\n') && (rest[i] != '\0')))
+	while(((strchr(unsorted_line, '\n') != NULL) || (strchr(unsorted_line, '\0') != NULL)) && ((unsorted_line[i] != '\n') && (unsorted_line[i] != '\0')))
 	{
-		new_line[i] = rest[i]; 
+		new_line[i] = unsorted_line[i]; 
 		i++;
 	}
 	if (*last_read == 0)
@@ -90,7 +107,7 @@ char *split_next_line(char *rest, int *last_read)
 	return (new_line);
 }
 
-char *split_remainder(char *rest)
+char *split_remainder(char *unsorted_line)
 {
 	unsigned int		i; 
 	unsigned int		d;
@@ -98,52 +115,38 @@ char *split_remainder(char *rest)
 
 	i = 0;
 	d = 0;
-	while (rest[i] != '\n' && rest[i] != '\0')
+	while (unsorted_line[i] != '\n' && unsorted_line[i] != '\0')
 		i++;
-	if (rest[i] == '\n')
+	if (unsorted_line[i] == '\n')
 		i++;
 	if (i == 0)
 		return (NULL);
 	remainder = malloc(sizeof(char) * i);
 	if (remainder == NULL)
 		return (NULL);
-	strcpy(remainder, &rest[i]);
-	free(rest);
-	rest = NULL;
+	strcpy(remainder, &unsorted_line[i]);
+	free(unsorted_line);
+	unsorted_line = NULL;
 	return(remainder);
 }
 
 
-int	main(void)
-{
-	char	*s;
-	int fd;
-	fd = 0;
-	int i;
+// int	main(void)
+// {
+// 	char	*s;
+// 	int fd;
+// 	fd = 0;
+// 	int i;
 
-	i = 1;
-	fd = open("/Users/pguranda/Projects/gnl_wip/text", O_RDONLY);
-	s = NULL;
-	s = get_next_line(fd);
-	printf ("%s", s);
-	s = get_next_line(fd);
-	printf ("%s", s);
-	s = get_next_line(fd);
-	printf ("%s", s);
-	s = get_next_line(fd);
-	printf ("%s", s);
-	s = get_next_line(fd);
-	printf ("%s", s);
-	s = get_next_line(fd);
-	printf ("%s", s);
-	// while (i <= 7)
-	// {
-	// 	s = get_next_line(fd);
-	// 	printf ("%s", s);
-	// 	free(s);
-	// 	s = NULL;
-	// 	i++;
-	// }
-	system("leaks a.out");
-	return (0);
-}
+// 	i = 0;
+// 	fd = open("/Users/pguranda/Projects/gnl_1/text", O_RDONLY);
+// 	s = get_next_line(fd);
+// 	printf ("%s", s);
+// 	//printf ("number of chars %lu\n", strlen(s));
+// 	// s = get_next_line(fd);
+// 	// printf ("%s", s);
+// 	// s = get_next_line(fd);
+// 	// printf ("%s", s);
+// 	system("leaks a.out");
+// 	return (0);
+// }

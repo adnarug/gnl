@@ -6,15 +6,14 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/14 17:11:23 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/15 16:39:43 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-//TODO: line merge back void or pointer?
 
-char	*line_merge(char  *new_line, char  *rest)
+char	*line_merge(char  *new_line, char  *unsorted_line)
 {
 	char					*new_string;
 	unsigned int			len;
@@ -23,31 +22,31 @@ char	*line_merge(char  *new_line, char  *rest)
 
 	i = 0;
 	counter = 0;
-	if (rest == NULL)
+	if (unsorted_line == NULL)
 	{
-		rest =  malloc(1 * sizeof(char));
-		*rest = '\0';
+		unsorted_line =  malloc(1 * sizeof(char));
+		*unsorted_line = '\0';
 	}
-	len = strlen(new_line) + strlen(rest);
-	new_string = malloc(sizeof(char) * (len) + 1 );
-	if (new_line == NULL || rest == NULL || new_string == NULL)
+	if (unsorted_line == NULL)
+		return (NULL);
+	len = strlen(new_line) + strlen(unsorted_line);
+	new_string = malloc(sizeof(char) * (len) + 1);//+1
+	if (new_string == NULL)
 		return NULL;
-	while (i < strlen(rest))
+	while (unsorted_line[i] != '\0')
 	{
-		new_string[i] = rest[i];
+		new_string[i] = unsorted_line[i];
 		i++;
 	}
-	while (counter <= strlen(new_line))
+	while (new_line[counter] != '\0')
 	{
 		new_string[i] = new_line[counter];
 		i++;
 		counter++;
 	}
-	if (rest != NULL)
-	{
-		free(rest);
-		rest = NULL;
-	}
+	new_string[len + 1] = '\0';
+	free(unsorted_line);
+	unsorted_line = NULL;
 	return(new_string);
 }
 
@@ -71,5 +70,5 @@ char	*ft_strchr(const char *s, int c)
 // 	line->temp = NULL;
 // 	*line->buf_counter = 0;
 // 	line->next_line = NULL;
-// 	line->rest = NULL;
+// 	line->unsorted_line = NULL;
 // }
