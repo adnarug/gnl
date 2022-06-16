@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pasha <pasha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 15:15:40 by rmazurit          #+#    #+#             */
-/*   Updated: 2022/06/15 23:01:15 by pasha            ###   ########.fr       */
+/*   Updated: 2022/06/16 14:14:07 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(void)
 	// int		fd4;
 	// int		fd5;
 	// int		fd6;
-	fd1 = open("/home/pasha/Desktop/printf/gnl/gnl_check/tests/lorem_ipsum.txt", O_RDONLY);
+	fd1 = open("/Users/pguranda/Projects/gnl_1/tests/lorem_ipsum.txt", O_RDONLY);
 	// fd2 = open("./tests/empty_line.txt", O_RDONLY);
 	// fd3 = open("./tests/empty_file.txt", O_RDONLY);
 	// fd4 = open("./tests/42_with_nl.txt", O_RDONLY);
@@ -37,7 +37,7 @@ int	main(void)
 	printf("\n\n******* MANDATORY TEST *******");
 	i = 1;	
 	printf("\n\n******* BIG TEXT *******\n");
-	while (i < 10)
+	while (i < 2)
 	{	
 		line = get_next_line(fd1);
 		printf("line [%d]: %s\n", i, line);
@@ -149,8 +149,8 @@ int	main(void)
 
 // 	close(fd2);
 // 	close(fd3);
-	
-// 	return (0);
+	system("leaks a.out");
+	return (0);
 	
 	//for testing purposes:
 	/* write output of test 4 to a separate file:

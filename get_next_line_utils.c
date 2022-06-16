@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pasha <pasha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/15 23:08:08 by pasha            ###   ########.fr       */
+/*   Updated: 2022/06/16 14:19:19 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*line_merge(char  *new_line, char  *unsorted_line)
 	counter = 0;
 	if (unsorted_line == NULL)
 	{
-		unsorted_line =  malloc(1 * sizeof(char));
+		unsorted_line = malloc(1 * sizeof(char));
 		*unsorted_line = '\0';
 	}
 	if (unsorted_line == NULL)
@@ -64,6 +64,11 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
+void	gn_free_buf(char **buf)
+{
+	free(*buf);
+	*buf = NULL;
+}
 // void struct_default_values(t_arg **line)
 // {
 // 	line->read_line = NULL;

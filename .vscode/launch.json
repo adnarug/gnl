@@ -4,13 +4,13 @@
       "name": "(gdb) Launch",
       "type": "cppdbg",
       "request": "launch",
-      "program": "/home/pasha/Desktop/printf/gnl/gnl_check/a.out",
+      "program": "/Users/pguranda/Projects/gnl_1/a.out",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
       "environment": [],
       "externalConsole": false,
-      "MIMode": "gdb",
+      "MIMode": "lldb",
       "setupCommands":[
         {
             "description": "Additional libs for gdb",
