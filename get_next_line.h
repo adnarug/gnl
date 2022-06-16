@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:31 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/16 14:19:25 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/16 17:26:36 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1
+#endif
 // char	*get_next_line(int fd);
 // void	get_line(int *iter, int fd, int buf, char **next_line);
 // char	*ft_strjoin(char const *s1, char const *s2);
@@ -28,7 +31,7 @@
 
 char	*split_next_line(char *unsorted_line, int *last_read);
 char	*split_remainder(char *unsorted_line);
-void	read_until_nl(int fd, char **unsorted_line, int *last_read);
+char	*read_until_nl(int fd, char *unsorted_line, int *last_read);
 char	*get_next_line(int fd);
 char	*line_merge(char  *new_line, char  *unsorted_line);
 char	*ft_strchr(const char *s, int c);

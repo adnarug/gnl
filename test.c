@@ -2,26 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void adding_world(char **s);
-void passing_string(char **s);
-
-
-int main ()
+int main()
 {
-    char *s;
-    s = NULL;
-    passing_string(&s);
-    printf ("This is the string %s", s);
-}
+    char s[3];
+    char c;
 
-void passing_string(char **s)
-{   
-    *s = malloc (sizeof(char) *  7);
-    strcpy(*s, "hello");
-    adding_world(s);
-}
-
-void adding_world(char **s)
-{
-    strcpy(*s," world");
+    s[1] = 'b';
+    s[0] = 'a';
+    s[2] = 'c';
+    printf("%s", s);
+    return (0);
 }

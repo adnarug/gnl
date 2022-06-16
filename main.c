@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 15:15:40 by rmazurit          #+#    #+#             */
-/*   Updated: 2022/06/16 14:14:07 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/16 17:31:13 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,21 +27,18 @@ int	main(void)
 	// int		fd4;
 	// int		fd5;
 	// int		fd6;
-	fd1 = open("/Users/pguranda/Projects/gnl_1/tests/lorem_ipsum.txt", O_RDONLY);
+	fd1 = open("/Users/pguranda/Projects/gnl_2/tests/42_with_nl.txt", O_RDONLY);
 	// fd2 = open("./tests/empty_line.txt", O_RDONLY);
 	// fd3 = open("./tests/empty_file.txt", O_RDONLY);
 	// fd4 = open("./tests/42_with_nl.txt", O_RDONLY);
 	// fd5 = open("./tests/nl.txt", O_RDONLY);
 	// fd6 = open("./tests/big_line_no_nl.txt", O_RDONLY);
 	
-	printf("\n\n******* MANDATORY TEST *******");
-	i = 1;	
-	printf("\n\n******* BIG TEXT *******\n");
-	while (i < 2)
+	i = 1;
+	while (i < 3)
 	{	
 		line = get_next_line(fd1);
-		printf("line [%d]: %s\n", i, line);
-	
+		printf("line [%d]: %s", i, line);
 		i++;
 	}
 	//close(fd1);
