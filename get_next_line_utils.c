@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/16 14:19:19 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/16 16:16:25 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ char	*line_merge(char  *new_line, char  *unsorted_line)
 		new_string[i] = unsorted_line[i];
 		i++;
 	}
+	i++;
 	while (new_line[counter] != '\0')
 	{
 		new_string[i] = new_line[counter];

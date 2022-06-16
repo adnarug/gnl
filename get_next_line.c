@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/16 14:15:18 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/16 16:15:47 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ void	read_until_nl(int fd, char **unsorted_line, int *last_read)
 		if(read_result == 0)
 		{
 			*last_read = 1;
-			*unsorted_line = line_merge(new_line, *unsorted_line);
-			break;
+			// *unsorted_line = line_merge(new_line, *unsorted_line);
+			// break;
 		}
-		// if (*new_line == '\n')
+		// // if (*new_line == '\n')
 		// {
 		// 	**unsorted_line = '\n';
 		// 	break;
