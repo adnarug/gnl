@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/17 11:46:56 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/17 13:02:35 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,29 +22,29 @@ char	*get_next_line(int fd)
 {
 	static char	*unsorted_line;
 	char		*next_line;
-	//int			last_read;
+	int			last_read;
 
 	next_line = NULL;
 	if(read(fd, NULL, 0) < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	//last_read = 0;
-	unsorted_line = read_until_nl(fd, unsorted_line);
+	last_read = 0;
+	unsorted_line = read_until_nl(fd, unsorted_line, &last_read);
 	if(unsorted_line == NULL)
 		return (NULL);
-	else if (*unsorted_line == '\0')
+	if (unsorted_line[0] == '\0')
 	{
-		gn_free_buf(&unsorted_line);
+		free(unsorted_line);
+		unsorted_line = NULL;
 		return (NULL);
 	}
-	next_line = split_next_line(unsorted_line);
-	if (unsorted_line != NULL && *unsorted_line != '\0')
+	next_line = split_next_line(unsorted_line, &last_read);
 	unsorted_line = split_remainder(unsorted_line);
 	return(next_line);
 }
 
 /*	
 	*/
-char	*read_until_nl(int fd, char *unsorted_line)
+char	*read_until_nl(int fd, char *unsorted_line, int *last_read)
 {
 	char	*new_line;
 	int		read_result;
@@ -62,12 +62,8 @@ char	*read_until_nl(int fd, char *unsorted_line)
 			new_line = NULL;
 			return (NULL); // maybe break and save some lines?
 		}
-		// if(read_result == 0)
-		// {
-		// 	*last_read = 1;
-		// 	unsorted_line = line_merge(new_line, unsorted_line);
-		// 	break;
-		// }
+		if(read_result == 0)
+			*last_read = 1;
 		// if (*new_line == '\n')
 		// {
 		// 	**unsorted_line = '\n';
@@ -82,12 +78,13 @@ char	*read_until_nl(int fd, char *unsorted_line)
 	return(unsorted_line);
 }
 
-char *split_next_line(char *unsorted_line)
+char *split_next_line(char *unsorted_line, int *last_read)
 {
 	char	*new_line;
 	int		i;
 
 	i = 0;
+	*last_read = 0;
 	//while (strchr(unsorted_line, '\n') != NULL && unsorted_line[i] != '\n')// zero here?
 	while (unsorted_line[i] != '\n' && unsorted_line[i] != '\0')
 		i++;

@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/16 17:27:01 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/17 12:00:32 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*line_merge(char  *new_line, char  *unsorted_line)
 	//printf ("length: %lu \n", strlen(new_line));
 	new_string = malloc(sizeof(char) * (len) + 1);//+1
 	if (new_string == NULL)
-		return NULL;
+		return (NULL);
 	while (unsorted_line[i] != '\0')
 	{
 		new_string[i] = unsorted_line[i];
@@ -45,7 +45,7 @@ char	*line_merge(char  *new_line, char  *unsorted_line)
 		i++;
 		counter++;
 	}
-	new_string[len] = '\0';
+	new_string[i] = '\0';
 	free(unsorted_line);
 	unsorted_line = NULL;
 	return(new_string);

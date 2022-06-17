@@ -6,14 +6,14 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:31 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/17 11:30:01 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/17 12:43:52 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 # include <string.h>
-# include <stdio.h>
+
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
@@ -29,9 +29,9 @@
 // void	ft_bzero(void *s, size_t n);
 // // void	struct_default_values(t_arg **line);
 
-char	*split_next_line(char *unsorted_line);
+char	*split_next_line(char *unsorted_line, int *last_read);
 char	*split_remainder(char *unsorted_line);
-char	*read_until_nl(int fd, char *unsorted_line);
+char	*read_until_nl(int fd, char *unsorted_line, int *last_read);
 char	*get_next_line(int fd);
 char	*line_merge(char  *new_line, char  *unsorted_line);
 char	*ft_strchr(const char *s, int c);
