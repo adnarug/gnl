@@ -6,11 +6,12 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/17 12:00:32 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/18 14:40:34 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "stdio.h"
 
 
 char	*line_merge(char  *new_line, char  *unsorted_line)
@@ -23,12 +24,7 @@ char	*line_merge(char  *new_line, char  *unsorted_line)
 	i = 0;
 	counter = 0;
 	if (unsorted_line == NULL)
-	{
-		unsorted_line = malloc(1 * sizeof(char));
-		*unsorted_line = '\0';
-	}
-	if (unsorted_line == NULL)
-		return (NULL);
+		unsorted_line = gn_set_buf(unsorted_line);
 	len = strlen(new_line) + strlen(unsorted_line);
 	//printf ("length: %lu \n", strlen(new_line));
 	new_string = malloc(sizeof(char) * (len) + 1);//+1
@@ -46,29 +42,38 @@ char	*line_merge(char  *new_line, char  *unsorted_line)
 		counter++;
 	}
 	new_string[i] = '\0';
-	free(unsorted_line);
-	unsorted_line = NULL;
+	gn_free_buf(&unsorted_line);
+	printf ("**** from the merge: *** \n new_line(tmp): %s new_string(join): %s unsorted: %s\n", new_line, new_string, unsorted_line);
 	return(new_string);
 }
 
-char	*ft_strchr(const char *s, int c)
+int	ft_strchr(const char *s, int c)
 {
 	int	i;
 
 	if (!s)
-		return (NULL);
+		return (0);
 	i = 0;
 	while (s[i] != (char)c && s[i] != '\0')
 		i++;
 	if (s[i] == (char)c)
-		return ((char *)s + i + 1);
-	return (NULL);
+		return (1);
+	return (0);
 }
 
 void	gn_free_buf(char **buf)
 {
 	free(*buf);
 	*buf = NULL;
+}
+
+char	*gn_set_buf(char *buf)
+{
+	buf = malloc(sizeof(char) * 1);
+	if (!buf)
+		return (NULL);
+	buf[0] = '\0';
+	return (buf);
 }
 // void struct_default_values(t_arg **line)
 // {

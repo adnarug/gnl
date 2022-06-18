@@ -4,7 +4,7 @@
       "name": "(gdb) Launch",
       "type": "cppdbg",
       "request": "launch",
-      "program": "/Users/pguranda/Projects/gnl_2/gnl_roma/a.out",
+      "program": "/Users/pguranda/Projects/gnl_2/a.out",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
