@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:31 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/20 18:31:23 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/20 18:01:33 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ char	*read_until_nl(int fd, char *unsorted_line, int *last_read);
 char	*get_next_line(int fd);
 char	*line_merge(char  *new_line, char  *unsorted_line);
 int	    ft_strchr(const char *s, int c);
-void	gn_free_buf(char **buf);
-void	ft_free(void *pointer);
+void	free_n_check(char **buf);
 char	*gn_set_buf(char *buf);
 
 

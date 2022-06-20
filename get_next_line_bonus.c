@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/20 18:32:31 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/20 16:57:32 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"./get_next_line.h"
+#include 	<fcntl.h>
 
-
-	/*- Read until the read line contains \n or EOF, then put it all into unsorted line
+/*	- Read until the read line contains \n or \0, then put it all into unsorted line
 	- Take out the next line from unsorted line and return it (leak to be freed in main)
-	- Take out the remainder after \n and put it at the start of unsorted line for further use*/
-
+	- Take out the remainder after \n and put it at the start of unsorted line for further use
+	- Leaking a new line, except for the last which is static*/
 char	*get_next_line(int fd)
 {
-	static char	*unsorted_line;
+	static char	*unsorted_line[1024];
 	char		*next_line;
 	int			last_read;
 
@@ -27,17 +27,18 @@ char	*get_next_line(int fd)
 	last_read = 0;
 	if(read(fd, NULL, 0) < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	unsorted_line = read_until_nl(fd, unsorted_line, &last_read);
-	if(unsorted_line == NULL)
+	unsorted_line[fd] = read_until_nl(fd, unsorted_line[fd], &last_read);
+	//printf("after_read: nl: %s ul: %s \n", next_line, unsorted_line);
+	if(unsorted_line[fd] == NULL)
 		return (NULL);
-	if(*unsorted_line == '\0')
+	if(unsorted_line[fd][0] == '\0')
 	{
-		gn_free_buf(&unsorted_line);
+		gn_free_buf(&unsorted_line[fd]);
 		return (NULL);
 	}
-	next_line = split_next_line(unsorted_line, &last_read);
+	next_line = split_next_line(unsorted_line[fd], &last_read);
 	//printf("after_extract: nl: %s ul: %s \n", next_line, unsorted_line);
-	unsorted_line = split_remainder(unsorted_line);
+	unsorted_line[fd] = split_remainder(unsorted_line[fd]);
 	//printf("after_remainder: nl: %s ul: %s \n \n ", next_line, unsorted_line);
 	return(next_line);
 }
@@ -144,3 +145,31 @@ char *split_remainder(char *unsorted_line)
 	gn_free_buf(&unsorted_line);
 	return(remainder);
 }
+
+
+// int	main(void)
+// {
+//  	char	*s;
+//  	int fd;
+//  	fd = 0;
+	 
+//  	fd = open("/Users/pguranda/Projects/gnl_1/text", O_RDONLY);
+//  	s = get_next_line(fd);
+//  	printf ("%s", s);
+// 	free(s);
+// 	s = get_next_line(fd);
+//  	printf ("%s", s);
+// 	// s = get_next_line(fd);
+// 	// printf ("%s", s);
+// 	// s = get_next_line(fd);
+// 	// printf ("%s", s);
+// 	// s = get_next_line(fd);
+// 	// printf ("%s", s);
+//  	//printf ("number of chars %lu\n", strlen(s));
+//  	// s = get_next_line(fd);
+// 	// printf ("%s", s);
+// 	// s = get_next_line(fd);
+// 	// printf ("%s", s);
+// 	system("leaks a.out");
+// 	return (0);
+// }

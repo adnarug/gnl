@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 15:15:40 by rmazurit          #+#    #+#             */
-/*   Updated: 2022/06/18 12:30:46 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/20 16:10:40 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(void)
 	// fd2 = open("./tests/empty_line.txt", O_RDONLY);
 	// fd3 = open("./tests/empty_file.txt", O_RDONLY);
 	// fd4 = open("./tests/42_with_nl.txt", O_RDONLY);
-	fd5 = open("/Users/pguranda/Projects/gnl_2/gnl_roma/tests/nl.txt", O_RDONLY);
+	fd5 = open("/Users/pguranda/Projects/gnl_2/gnl_roma/tests/multiple_line_no_nl", O_RDONLY);
 	// fd6 = open("./tests/big_line_no_nl.txt", O_RDONLY);
 	
 	// printf("\n\n******* MANDATORY TEST *******");
@@ -83,7 +83,7 @@ int	main(void)
 
 	i = 1;
 	printf("\n\n******* EMPTY FILE WITH NEWLINE *******\n");
-	while (i < 3)
+	while (i < 6)
 	{
 		line = get_next_line(fd5);
 		printf("line [%d]: %s", i, line);
