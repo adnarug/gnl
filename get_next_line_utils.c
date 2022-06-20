@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/20 19:07:25 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/20 20:12:13 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,26 +24,19 @@ char	*line_merge(char  *new_line, char  *unsorted_line)
 	i = 0;
 	counter = 0;
 	if (unsorted_line == NULL)
-		unsorted_line = gn_set_buf(unsorted_line);
+	{
+		unsorted_line = malloc(sizeof(char) * 1);
+		if (unsorted_line != NULL)
+			return (NULL);
+			*unsorted_line = '\0';
+		}
 	len = strlen(new_line) + strlen(unsorted_line);
-	//printf ("length: %lu \n", strlen(new_line));
 	new_string = malloc(sizeof(char) * (len) + 1);//+1
 	if (new_string == NULL)
 		return (NULL);
-	while (unsorted_line[i] != '\0')
-	{
-		new_string[i] = unsorted_line[i];
-		i++;
-	}
-	while (new_line[counter] != '\0')
-	{
-		new_string[i] = new_line[counter];
-		i++;
-		counter++;
-	}
-	new_string[i] = '\0';
+	ft_strcpy(new_string, unsorted_line, &i, &i);
+	ft_strcpy(new_string, new_line, &i, &counter);
 	gn_free_buf(&unsorted_line);
-	//printf ("**** from the merge: *** \n new_line(tmp): %s new_string(join): %s unsorted: %s\n", new_line, new_string, unsorted_line);
 	return(new_string);
 }
 
@@ -67,38 +60,31 @@ void	gn_free_buf(char **buf)
 	*buf = NULL;
 }
 
-char	*gn_set_buf(char *buf)
-{
-	buf = malloc(sizeof(char) * 1);
-	if (!buf)
-		return (NULL);
-	buf[0] = '\0';
-	return (buf);
-}
-
 int	ft_strlen(const char *c)
 {
 	size_t				i;
 
 	i = 0;
 	while (c[i] != '\0')
-	{
 		i++;
-	}
 	return (i);
 }
 
-void	ft_strcpy(char *dst, const char *src, size_t start)
+void	ft_strcpy(char *dst, const char *src, unsigned int *dst_start, unsigned int *src_start)
 {
 	unsigned int				counter;
+	int							flag;
 
 	counter = 0;
-	while (src[start] != '\0')
+	if (*dst_start == 0 && *src_start == 0)
+		flag = 1;
+	while (src[*src_start] != '\0')
 	{
-		dst[counter] = src[start];
-		start++;
-		counter++;
+		dst[*dst_start] = src[*src_start];
+		*dst_start += 1;
+		*src_start += 1;
 	}
-	dst[counter] = '\0';
+	if (flag != 1)
+		dst[*dst_start] = '\0';
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/20 19:08:17 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/20 20:09:59 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ char	*split_remainder(char *unsorted_line)
 	if (remainder == NULL)
 		return (NULL);
 	i++;
-	ft_strcpy(remainder, unsorted_line, i);
+	ft_strcpy(remainder, unsorted_line, 0, &i);
 	gn_free_buf(&unsorted_line);
 	return (remainder);
 }
