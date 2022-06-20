@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/20 18:31:12 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/20 19:07:25 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,30 @@ char	*gn_set_buf(char *buf)
 	buf[0] = '\0';
 	return (buf);
 }
-// void struct_default_values(t_arg **line)
-// {
-// 	line->read_line = NULL;
-// 	line->temp = NULL;
-// 	*line->buf_counter = 0;
-// 	line->next_line = NULL;
-// 	line->unsorted_line = NULL;
-// }
+
+int	ft_strlen(const char *c)
+{
+	size_t				i;
+
+	i = 0;
+	while (c[i] != '\0')
+	{
+		i++;
+	}
+	return (i);
+}
+
+void	ft_strcpy(char *dst, const char *src, size_t start)
+{
+	unsigned int				counter;
+
+	counter = 0;
+	while (src[start] != '\0')
+	{
+		dst[counter] = src[start];
+		start++;
+		counter++;
+	}
+	dst[counter] = '\0';
+	return ;
+}
