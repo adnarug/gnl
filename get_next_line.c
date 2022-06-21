@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/20 19:08:17 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/21 11:29:51 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*read_until_nl(int fd, char *unsorted_line)
 			break ;
 		new_line[read_result] = '\0';
 		unsorted_line = line_merge(new_line, unsorted_line);
-		bzero(new_line, BUFFER_SIZE + 1);
+	
 	}
 	free(new_line);
 	new_line = NULL;
@@ -113,7 +113,7 @@ char	*split_remainder(char *unsorted_line)
 		gn_free_buf(&unsorted_line);
 		return (NULL);
 	}
-	remainder = malloc(sizeof(char) * (strlen(unsorted_line) - i + 1));
+	remainder = malloc(sizeof(char) * (ft_strlen(unsorted_line) - i + 1));
 	if (remainder == NULL)
 		return (NULL);
 	i++;
