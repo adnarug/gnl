@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:27 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/21 11:40:12 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/22 17:08:14 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include	"get_next_line_bonus.h"
 
 /* -Merging the old reads with the new ones
-   -Resulting new string becomes unsorted */
+   -Resulting new string becomes the new unsorted */
 char	*line_merge(char *new_line, char *unsorted_line)
 {
 	char					*new_string;
@@ -25,7 +25,7 @@ char	*line_merge(char *new_line, char *unsorted_line)
 		unsorted_line = malloc(sizeof(char) * 1);
 		if (unsorted_line == NULL)
 			return (NULL);
-		*unsorted_line = '\0';
+		unsorted_line[0] = '\0';
 	}
 	new_string = malloc(sizeof(char) * \
 		(ft_strlen(new_line) + ft_strlen(unsorted_line) + 1));

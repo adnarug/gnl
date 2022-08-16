@@ -1,39 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguranda <pguranda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:45:34 by pguranda          #+#    #+#             */
-/*   Updated: 2022/06/22 17:08:08 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/06/22 17:26:32 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include	"get_next_line_bonus.h"
 
 /*	- Read until the read \n or EOF, then put into unsorted line
 	- Take out the next line from unsorted line
 	- Take out the remainder from unsorted line
-		put it at the start of unsorted for futer usage*/
+		put it at the start of unsorted for futher usage
+	BONUS: unsorted_line declared as a 2d array with the max 
+			number of 1024 (soft limit of fd)*/
 char	*get_next_line(int fd)
 {
-	static char	*unsorted_line;
+	static char	*unsorted_line[1024];
 	char		*next_line;
 
 	next_line = NULL;
 	if (read(fd, NULL, 0) < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	unsorted_line = read_until_nl(fd, unsorted_line);
-	if (unsorted_line == NULL)
+	unsorted_line[fd] = read_until_nl(fd, unsorted_line[fd]);
+	if (unsorted_line[fd] == NULL)
 		return (NULL);
-	if (*unsorted_line == '\0')
+	while (unsorted_line[fd][0] == '\0')
 	{
-		ft_free(&unsorted_line);
+		ft_free(&unsorted_line[fd]);
 		return (NULL);
 	}
-	next_line = split_next_line(unsorted_line);
-	unsorted_line = split_remainder(unsorted_line);
+	next_line = split_next_line(unsorted_line[fd]);
+	unsorted_line[fd] = split_remainder(unsorted_line[fd]);
 	return (next_line);
 }
 
@@ -75,11 +77,14 @@ char	*split_next_line(char *unsorted_line)
 	int		i;
 
 	i = 0;
+	new_line = NULL;
+	if (unsorted_line == NULL)
+		return (NULL);
 	while (unsorted_line[i] != '\n' && unsorted_line[i] != '\0')
 		i++;
 	if (unsorted_line[i] == '\n')
 		new_line = malloc(sizeof(char) * (i + 2));
-	else
+	else if (unsorted_line[i] == '\0')
 		new_line = malloc(sizeof(char) * (i + 1));
 	if (new_line == NULL)
 		return (NULL);
@@ -102,6 +107,8 @@ char	*split_remainder(char *unsorted_line)
 	unsigned int		i;
 	char				*remainder;
 
+	if (unsorted_line == NULL)
+		return (NULL);
 	i = 0;
 	while (unsorted_line[i] != '\n' && unsorted_line[i] != '\0')
 		i++;
